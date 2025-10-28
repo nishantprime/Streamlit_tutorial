@@ -32,8 +32,9 @@ try:
             "No results found for the query."
     else:
         "No results found for the query."
-except:
+except Exception as e:
     "Could not extract the song, possible copyright."
+    print(e)
 
 
 
