@@ -28,7 +28,7 @@ try:
     
     else:
         "No results found for the query."
-else:
+except:
     "Could not extract the song, possible copyright."
 
 
