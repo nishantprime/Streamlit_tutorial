@@ -1,21 +1,32 @@
 import streamlit as st
 import yt_dlp
+from youtubesearchpython import SearchVideos
+import json
 
 'Youtube Song Player'
 
-url = st.text_input('youtube','https://www.youtube.com/watch?v=9Zj0JOHJR-s')
+query = st.text_input('enter song name', 'extreme ways')
 
-ydl_opts = {
-        'format': 'bestaudio/best', # Select the best audio str
-        
-        # Tell yt-dlp to write the output to our in-memory buffer
-        'quiet': True,
-        'noprogress': True,
-        'nocheckcertificate': True
-    }
-info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download=False)
+search = SearchVideos(query, mode="json", max_results=1)
+results_data = json.loads(search.result())
 
-info['fulltitle'] , info['duration_string']
-st.image(info['thumbnail'])
+if results_data and results_data['search_result']:
+    url = results_data['search_result'][0]['link']
+    ydl_opts = {
+            'format': 'bestaudio/best',
+            'quiet': True,
+            'noprogress': True,
+            'nocheckcertificate': True
+        }
+    info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download=False)
+    
+    info['fulltitle'] , info['duration_string']
+    st.image(info['thumbnail'])
+    
+    st.audio(info['url'])
 
-st.audio(info['url'])
+else:
+    "No results found for the query."
+
+
+
