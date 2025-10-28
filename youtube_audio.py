@@ -7,7 +7,7 @@ import json
 
 query = st.text_input('enter song name', 'extreme ways')
 
-search = SearchVideos(query, mode="json", max_results=1)
+search = SearchVideos(query, offset=1, mode="json", max_results=1)
 results_data = json.loads(search.result())
 
 if results_data and results_data['search_result']:
