@@ -26,11 +26,17 @@ st.title(f"📈 {ticker} Stock Dashboard")
 def get_stock_data(ticker, start, end):
     try:
         data = yf.download(ticker, start=start, end=end, progress=False)
+        
+        # --- FIX: Flatten MultiIndex columns if present ---
+        if isinstance(data.columns, pd.MultiIndex):
+            data.columns = data.columns.get_level_values(0)
+        # --------------------------------------------------
+
         data.reset_index(inplace=True)
         return data
     except Exception as e:
+        st.error(f"Error fetching data: {e}")
         return None
-
 # Load data
 if start_date < end_date:
     data = get_stock_data(ticker, start_date, end_date)
